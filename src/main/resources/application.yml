@@ -1,0 +1,6 @@
+spring:
+  application:
+   name: ToDo_APP
+  profiles:
+    active: dev
+
