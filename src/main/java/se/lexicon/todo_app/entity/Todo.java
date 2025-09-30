@@ -1,7 +1,9 @@
 package se.lexicon.todo_app.entity;
 
 import java.time.LocalDateTime;
+import java.util.LinkedHashSet;
 import java.util.Objects;
+import java.util.Set;
 
 import jakarta.persistence.*;
 import lombok.*;
@@ -43,6 +45,11 @@ public class Todo {
     @Transient // transient annotation is used to indicate that a field should not be persisted in the database.
     private Boolean isAssigned;
 
+    @Setter(AccessLevel.NONE)
+    @OneToMany(mappedBy = "todo", cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = true)
+    private Set<Attachment> attachments = new LinkedHashSet<>();
+
+
     public Todo(String title, String description, LocalDateTime dueDate, Person assigned) {
         this.title = title;
         this.description = description;
@@ -70,6 +77,23 @@ public class Todo {
     public void preUpdate() {
         this.updatedAt = LocalDateTime.now();
     }
+    
+    public void addAttachment(Attachment attachment) {
+        if (this.attachments == null) {
+            this.attachments = new LinkedHashSet<>();
+        }
+        
+        this.attachments.add(attachment);
+        attachment.setTodo(this); // sync Back-reference
+    }
+
+    public void removeAttachment(Attachment attachment) {
+        if (this.attachments != null) {
+            attachments.remove(attachment);
+            attachment.setTodo(null); // remove Back-reference
+        }
+    }
+
 
     @Override
     public boolean equals(Object o) {
