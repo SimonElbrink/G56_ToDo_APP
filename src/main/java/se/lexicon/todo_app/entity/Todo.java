@@ -7,6 +7,7 @@ import java.util.Set;
 
 import jakarta.persistence.*;
 import lombok.*;
+import org.hibernate.proxy.HibernateProxy;
 
 @Setter
 @Getter
@@ -45,6 +46,7 @@ public class Todo {
     @Transient // transient annotation is used to indicate that a field should not be persisted in the database.
     private Boolean isAssigned;
 
+    @ToString.Exclude
     @Setter(AccessLevel.NONE)
     @OneToMany(mappedBy = "todo", cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = true)
     private Set<Attachment> attachments = new LinkedHashSet<>();
@@ -96,13 +98,18 @@ public class Todo {
 
 
     @Override
-    public boolean equals(Object o) {
-        if (!(o instanceof Todo todo)) return false;
-        return completed == todo.completed && Objects.equals(id, todo.id) && Objects.equals(title, todo.title) && Objects.equals(description, todo.description) && Objects.equals(createdAt, todo.createdAt) && Objects.equals(updatedAt, todo.updatedAt) && Objects.equals(dueDate, todo.dueDate) && Objects.equals(assigned, todo.assigned);
+    public final boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null) return false;
+        Class<?> oEffectiveClass = o instanceof HibernateProxy ? ((HibernateProxy) o).getHibernateLazyInitializer().getPersistentClass() : o.getClass();
+        Class<?> thisEffectiveClass = this instanceof HibernateProxy ? ((HibernateProxy) this).getHibernateLazyInitializer().getPersistentClass() : this.getClass();
+        if (thisEffectiveClass != oEffectiveClass) return false;
+        Todo todo = (Todo) o;
+        return getId() != null && Objects.equals(getId(), todo.getId());
     }
 
     @Override
-    public int hashCode() {
-        return Objects.hash(id, title, description, completed, createdAt, updatedAt, dueDate, assigned);
+    public final int hashCode() {
+        return this instanceof HibernateProxy ? ((HibernateProxy) this).getHibernateLazyInitializer().getPersistentClass().hashCode() : getClass().hashCode();
     }
 }

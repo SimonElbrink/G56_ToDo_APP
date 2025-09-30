@@ -8,7 +8,7 @@ import java.util.Objects;
 
 @Getter
 @Setter
-@NoArgsConstructor
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor
 @ToString(exclude = "todo")
 
@@ -47,7 +47,7 @@ public class Attachment {
     public void setTodo(Todo todo) {
         this.todo = todo;
 
-        if(todo != null) {
+        if (todo != null) {
             todo.getAttachments().add(this); // Sync the other side if not already present
         }
 

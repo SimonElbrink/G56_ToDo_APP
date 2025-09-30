@@ -2,6 +2,7 @@ package se.lexicon.todo_app.entity;
 
 import jakarta.persistence.*;
 import lombok.*;
+import org.hibernate.proxy.HibernateProxy;
 
 import java.time.LocalDate;
 import java.util.Objects;
@@ -40,13 +41,18 @@ public class Person {
     }
 
     @Override
-    public boolean equals(Object o) {
-        if (!(o instanceof Person person)) return false;
-        return Objects.equals(id, person.id) && Objects.equals(name, person.name) && Objects.equals(email, person.email) && Objects.equals(createdAt, person.createdAt);
+    public final boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null) return false;
+        Class<?> oEffectiveClass = o instanceof HibernateProxy ? ((HibernateProxy) o).getHibernateLazyInitializer().getPersistentClass() : o.getClass();
+        Class<?> thisEffectiveClass = this instanceof HibernateProxy ? ((HibernateProxy) this).getHibernateLazyInitializer().getPersistentClass() : this.getClass();
+        if (thisEffectiveClass != oEffectiveClass) return false;
+        Person person = (Person) o;
+        return getId() != null && Objects.equals(getId(), person.getId());
     }
 
     @Override
-    public int hashCode() {
-        return Objects.hash(id, name, email, createdAt);
+    public final int hashCode() {
+        return this instanceof HibernateProxy ? ((HibernateProxy) this).getHibernateLazyInitializer().getPersistentClass().hashCode() : getClass().hashCode();
     }
 }
