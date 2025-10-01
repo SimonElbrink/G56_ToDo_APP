@@ -8,6 +8,7 @@ import se.lexicon.todo_app.entity.Person;
 import se.lexicon.todo_app.entity.Todo;
 import se.lexicon.todo_app.repo.PersonRepository;
 import se.lexicon.todo_app.repo.TodoRepository;
+import se.lexicon.todo_app.service.PersonService;
 
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -19,7 +20,7 @@ import java.util.Arrays;
 public class DataInitializer {
 
     @Bean
-    CommandLineRunner run(PersonRepository personRepository, TodoRepository todoRepository) {
+    CommandLineRunner run(PersonRepository personRepository, TodoRepository todoRepository, PersonService personService) {
         return (args) -> {
 
             Person dev1 = personRepository.save(new Person("Dev1", "dev1@test.se"));
@@ -55,6 +56,10 @@ public class DataInitializer {
             // todo6 not assigned to anyone
 
             todoRepository.saveAll(Arrays.asList(todo1, todo2, todo3, todo4, todo5, todo6));
+
+
+
+            personService.createPerson(new Person("Simon", "simon@lexicon.se"));
 
         };
     }
