@@ -39,8 +39,7 @@ public class Todo {
     private LocalDateTime dueDate;
 
     @ManyToOne
-    @JoinColumn(name = "person_id")
-    private Person assigned;
+    private Person assignedTo;
 
 
     @Transient // transient annotation is used to indicate that a field should not be persisted in the database.
@@ -52,11 +51,11 @@ public class Todo {
     private Set<Attachment> attachments = new LinkedHashSet<>();
 
 
-    public Todo(String title, String description, LocalDateTime dueDate, Person assigned) {
+    public Todo(String title, String description, LocalDateTime dueDate, Person assignedTo) {
         this.title = title;
         this.description = description;
         this.dueDate = dueDate;
-        this.assigned = assigned;
+        this.assignedTo = assignedTo;
     }
 
     public Todo(String title, String description, LocalDateTime dueDate) {
