@@ -10,3 +10,14 @@ GET localhost:9090/api/todos/1
 
 # Will not find the task - Exception is thrown.
 GET localhost:9090/api/todos/112341234
+
+###
+
+# Create Person
+POST localhost:9090/api/persons
+Content-Type: application/json
+
+{
+  "name": "NAME_OF_PERSON",
+  "email": "EMAIL@DOMAIN.COM"
+}
