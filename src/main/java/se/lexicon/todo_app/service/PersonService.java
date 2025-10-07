@@ -1,9 +1,14 @@
 package se.lexicon.todo_app.service;
 
-import se.lexicon.todo_app.entity.Person;
+import se.lexicon.todo_app.dto.PersonDto;
+
+import java.util.List;
 
 public interface PersonService {
 
-    Person createPerson(Person person);
+    PersonDto createPerson(PersonDto person);
 
+    PersonDto findById(Long id);
+
+    List<PersonDto> findAll();
 }

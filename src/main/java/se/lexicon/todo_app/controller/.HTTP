@@ -2,7 +2,11 @@
 ### Find all People
 GET localhost:9090/api/person
 
-### Find all People FAIL
+
+### Find all Person with ID 1 (PathVariable)
+GET localhost:9090/api/person/1
+
+### Find all People FAIL - 404 Status Code
 GET localhost:9090/asdasdas
 
 ### Create a Person

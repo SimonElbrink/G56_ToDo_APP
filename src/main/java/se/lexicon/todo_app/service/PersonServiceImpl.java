@@ -3,9 +3,13 @@ package se.lexicon.todo_app.service;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import se.lexicon.notify.model.Email;
+import se.lexicon.todo_app.dto.PersonDto;
 import se.lexicon.todo_app.entity.Person;
 import se.lexicon.todo_app.repo.PersonRepository;
 import se.lexicon.notify.service.EmailService;
+
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Slf4j
 @Service
@@ -21,9 +25,12 @@ public class PersonServiceImpl implements PersonService {
     }
 
     @Override
-    public Person createPerson(Person person) {
+    public PersonDto createPerson(PersonDto personDto) {
 
-        Person saved = personRepository.save(person);
+        Person person = new Person(personDto.name(), personDto.email());
+
+
+        person = personRepository.save(person);
 
 //        // Send a welcome email to the new user
 //        if (saved.getId() != null) {
@@ -42,6 +49,23 @@ public class PersonServiceImpl implements PersonService {
 //           }
 //        }
 
-        return saved;
+        return new PersonDto(person.getId(), person.getName(), person.getEmail());
+    }
+
+    @Override
+    public PersonDto findById(Long id) {
+
+        Person person = personRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Person not found"));
+
+        return new PersonDto(person.getId(), person.getName(), person.getEmail());
+    }
+
+    @Override
+    public List<PersonDto> findAll() {
+        return personRepository.findAll().stream()
+                .map(person -> new PersonDto(person.getId(), person.getName(), person.getEmail()))
+                .collect(Collectors.toList());
+
     }
 }

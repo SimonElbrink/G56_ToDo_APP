@@ -2,8 +2,7 @@ package se.lexicon.todo_app.controller;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
-import se.lexicon.todo_app.entity.Person;
-import se.lexicon.todo_app.repo.PersonRepository;
+import se.lexicon.todo_app.dto.PersonDto;
 import se.lexicon.todo_app.service.PersonService;
 
 import java.util.List;
@@ -14,11 +13,9 @@ import java.util.List;
 public class PersonController {
 
     private final PersonService personService;
-    private final PersonRepository personRepository;
 
-    public PersonController(PersonService personService, PersonRepository personRepository) {
+    public PersonController(PersonService personService) {
         this.personService = personService;
-        this.personRepository = personRepository;
     }
 
 
@@ -26,21 +23,22 @@ public class PersonController {
 //    @RequestMapping(method = RequestMethod.GET)
     @GetMapping
     @ResponseStatus(HttpStatus.OK)
-    public List<Person> getAllPersons() {
-        System.out.println("Find all persons");
-        return personRepository.findAll();
+    public List<PersonDto> getAllPersons() {
+        return personService.findAll();
     }
 
-
-
-
-
+    // GET localhost:9090/api/person/:id -> with ex 1 or 2 as ID
+    @GetMapping("/{id}")
+    @ResponseStatus(HttpStatus.OK)
+    public PersonDto getPersonById(@PathVariable("id") Long id) {
+        return personService.findById(id);
+    }
 
     // POST localhost:9090/api/person -> with a JSON Body
 //    @RequestMapping(method = RequestMethod.POST)
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public void createPerson(@RequestBody Person person) {
-        personService.createPerson(person);
+    public PersonDto createPerson(@RequestBody PersonDto personDto) {
+        return personService.createPerson(personDto);
     }
 }

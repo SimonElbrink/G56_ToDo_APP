@@ -3,6 +3,7 @@ package se.lexicon.todo_app.config;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import se.lexicon.todo_app.dto.PersonDto;
 import se.lexicon.todo_app.entity.Attachment;
 import se.lexicon.todo_app.entity.Person;
 import se.lexicon.todo_app.entity.Todo;
@@ -34,7 +35,7 @@ public class DataInitializer {
 
     private static void createPersonAndSendEmail(PersonService personService, boolean proceed) {
         if (proceed){
-            personService.createPerson(new Person("Simon", "test@test.se"));
+            personService.createPerson(new PersonDto(0L,"Simon", "test@test.se"));
         }
     }
 
