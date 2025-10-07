@@ -73,4 +73,22 @@ public class PersonServiceImpl implements PersonService {
     public void delete(Long id) {
         personRepository.deleteById(id);
     }
+
+    @Override
+    public void update(Long id, PersonDto personDto) {
+        //TODO Implement this method
+    }
+
+    @Override
+    public PersonDto findByEmail(String email) {
+
+        Person person = personRepository.findByEmailIgnoreCase(email)
+                .orElseThrow(() -> new RuntimeException("Person not found"));
+
+        return PersonDto.builder()
+                .id(person.getId())
+                .name(person.getName())
+                .email(person.getEmail())
+                .build();
+    }
 }

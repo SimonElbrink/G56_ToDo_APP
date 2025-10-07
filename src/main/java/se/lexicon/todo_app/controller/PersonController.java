@@ -17,8 +17,9 @@ public class PersonController {
     public PersonController(PersonService personService) {
         this.personService = personService;
     }
+
     // GET localhost:9090/api/person
-//    @RequestMapping(method = RequestMethod.GET)
+    // @RequestMapping(method = RequestMethod.GET)
     @GetMapping
     @ResponseStatus(HttpStatus.OK)
     public List<PersonDto> getAllPersons() {
@@ -33,16 +34,32 @@ public class PersonController {
     }
 
     // POST localhost:9090/api/person -> with a JSON Body
-//    @RequestMapping(method = RequestMethod.POST)
+    // @RequestMapping(method = RequestMethod.POST)
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     public PersonDto createPerson(@RequestBody PersonDto personDto) {
         return personService.createPerson(personDto);
     }
 
+    // GET localhost:9090/api/person/email?email=:email
+    @GetMapping("/email")
+    public PersonDto getPersonByEmail(@RequestParam String email) {
+        return personService.findByEmail(email);
+    }
+
+    @PutMapping("/{id}")
+    public void updatePerson(@PathVariable Long id, @RequestBody PersonDto personDto) {
+        personService.update(id, personDto);
+    }
+
+    @PatchMapping("/{id}")
+    public void updatePerson(@PathVariable Long id, @RequestParam String name) {
+        //personService.update(id,name); // TODO: implement this method
+    }
+
     @DeleteMapping("/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void deletePerson(@PathVariable Long id){
+    public void deletePerson(@PathVariable Long id) {
         personService.delete(id);
 
     }

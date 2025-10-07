@@ -20,3 +20,19 @@ Content-Type: application/json
 
 ### Delete Person by ID
 DELETE localhost:9090/api/person/34
+
+
+### Update Person (PathVariable + RequestBody)
+PUT localhost:9090/api/person/1
+
+{
+  "id": 1,
+  "name": "Simon",
+  "email": "simon@lexicon.se"
+}
+
+### Update Person (PathVariable & RequestParam)
+PATCH localhost:9090/api/person/1?name=Simon Elbrink
+
+### find with email(RequestParam)
+GET http://localhost:9090/api/person/email?email=simon@LEXICON.se

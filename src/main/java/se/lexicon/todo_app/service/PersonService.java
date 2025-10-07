@@ -13,4 +13,8 @@ public interface PersonService {
     List<PersonDto> findAll();
 
     void delete(Long id);
+
+    void update(Long id, PersonDto personDto);
+
+    PersonDto findByEmail(String email);
 }
