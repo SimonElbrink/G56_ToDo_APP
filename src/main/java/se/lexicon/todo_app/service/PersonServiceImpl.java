@@ -49,7 +49,11 @@ public class PersonServiceImpl implements PersonService {
 //           }
 //        }
 
-        return new PersonDto(person.getId(), person.getName(), person.getEmail());
+        return PersonDto.builder()
+                .id(person.getId())
+                .name(person.getName())
+                .email(person.getEmail())
+                .build();
     }
 
     @Override
@@ -58,13 +62,22 @@ public class PersonServiceImpl implements PersonService {
         Person person = personRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Person not found"));
 
-        return new PersonDto(person.getId(), person.getName(), person.getEmail());
+        return PersonDto.builder()
+                .id(person.getId())
+                .name(person.getName())
+                .email(person.getEmail())
+                .createdAt(person.getCreatedAt())
+                .build();
     }
 
     @Override
     public List<PersonDto> findAll() {
         return personRepository.findAll().stream()
-                .map(person -> new PersonDto(person.getId(), person.getName(), person.getEmail()))
+                .map(person -> PersonDto.builder()
+                        .id(person.getId())
+                        .name(person.getName())
+                        .email(person.getEmail())
+                        .build())
                 .collect(Collectors.toList());
 
     }
