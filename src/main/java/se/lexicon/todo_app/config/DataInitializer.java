@@ -24,10 +24,10 @@ public class DataInitializer {
     CommandLineRunner run(PersonRepository personRepository, TodoRepository todoRepository, PersonService personService) {
         return (args) -> {
 
-            seedData(personRepository, todoRepository);
+//            seedData(personRepository, todoRepository);
 
 
-            createPersonAndSendEmail(personService, false);
+//            createPersonAndSendEmail(personService, false);
 
         };
     }
