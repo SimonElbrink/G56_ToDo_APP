@@ -1,0 +1,17 @@
+
+### Find all People
+GET localhost:9090/api/person
+
+### Find all People FAIL
+GET localhost:9090/asdasdas
+
+### Create a Person
+POST localhost:9090/api/person
+Content-Type: application/json
+
+{
+  "name": "Simon",
+  "email": "simon2@lexicon.se"
+}
+
+

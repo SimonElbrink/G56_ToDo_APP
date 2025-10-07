@@ -9,8 +9,8 @@ import se.lexicon.todo_app.service.PersonService;
 import java.util.List;
 
 @RestController
-@RequestMapping("api/persons")
-// http://localhost:9090/api/persons
+@RequestMapping("api/person")
+// http://localhost:9090/api/person
 public class PersonController {
 
     private final PersonService personService;
@@ -22,17 +22,23 @@ public class PersonController {
     }
 
 
-    // GET localhost:9090/api/persons
+    // GET localhost:9090/api/person
 //    @RequestMapping(method = RequestMethod.GET)
     @GetMapping
+    @ResponseStatus(HttpStatus.OK)
     public List<Person> getAllPersons() {
         System.out.println("Find all persons");
         return personRepository.findAll();
     }
 
 
-    // POST localhost:9090/api/persons -> with a JSON Body
-    @RequestMapping(method = RequestMethod.POST)
+
+
+
+
+    // POST localhost:9090/api/person -> with a JSON Body
+//    @RequestMapping(method = RequestMethod.POST)
+    @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     public void createPerson(@RequestBody Person person) {
         personService.createPerson(person);
