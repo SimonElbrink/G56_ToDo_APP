@@ -35,7 +35,12 @@ public class DataInitializer {
 
     private static void createPersonAndSendEmail(PersonService personService, boolean proceed) {
         if (proceed){
-            personService.createPerson(new PersonDto(0L,"Simon", "test@test.se"));
+            personService.createPerson(
+                    PersonDto.builder()
+                            .name("Simon")
+                            .email("Simon@lexicon.se")
+                            .build()
+            );
         }
     }
 
