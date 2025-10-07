@@ -68,4 +68,9 @@ public class PersonServiceImpl implements PersonService {
                 .collect(Collectors.toList());
 
     }
+
+    @Override
+    public void delete(Long id) {
+        personRepository.deleteById(id);
+    }
 }

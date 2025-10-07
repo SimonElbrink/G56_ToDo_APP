@@ -17,8 +17,6 @@ public class PersonController {
     public PersonController(PersonService personService) {
         this.personService = personService;
     }
-
-
     // GET localhost:9090/api/person
 //    @RequestMapping(method = RequestMethod.GET)
     @GetMapping
@@ -41,4 +39,12 @@ public class PersonController {
     public PersonDto createPerson(@RequestBody PersonDto personDto) {
         return personService.createPerson(personDto);
     }
+
+    @DeleteMapping("/{id}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void deletePerson(@PathVariable Long id){
+        personService.delete(id);
+
+    }
+
 }

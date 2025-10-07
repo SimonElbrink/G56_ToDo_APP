@@ -11,4 +11,6 @@ public interface PersonService {
     PersonDto findById(Long id);
 
     List<PersonDto> findAll();
+
+    void delete(Long id);
 }

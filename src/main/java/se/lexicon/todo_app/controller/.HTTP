@@ -15,7 +15,8 @@ Content-Type: application/json
 
 {
   "name": "Simon",
-  "email": "simon2@lexicon.se"
+  "email": "simon@lexicon.se"
 }
 
-
+### Delete Person by ID
+DELETE localhost:9090/api/person/34
