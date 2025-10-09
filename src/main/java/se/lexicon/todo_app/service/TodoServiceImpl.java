@@ -2,7 +2,9 @@ package se.lexicon.todo_app.service;
 
 import org.springframework.stereotype.Service;
 import se.lexicon.todo_app.dto.TodoDto;
+import se.lexicon.todo_app.entity.Person;
 import se.lexicon.todo_app.entity.Todo;
+import se.lexicon.todo_app.repo.PersonRepository;
 import se.lexicon.todo_app.repo.TodoRepository;
 
 import java.time.LocalDateTime;
@@ -13,11 +15,12 @@ import java.util.stream.Collectors;
 public class TodoServiceImpl implements TodoService {
 
     private TodoRepository todoRepository;
+    private PersonRepository personRepository;
 
-    public TodoServiceImpl(TodoRepository todoRepository) {
+    public TodoServiceImpl(TodoRepository todoRepository, PersonRepository personRepository) {
         this.todoRepository = todoRepository;
+        this.personRepository = personRepository;
     }
-
 
     @Override
     public List<TodoDto> findAll() {
@@ -35,12 +38,43 @@ public class TodoServiceImpl implements TodoService {
 
     @Override
     public TodoDto create(TodoDto todoDto) {
-        return null; // TODO: Implement this method
+
+        Todo todo = new Todo(
+                todoDto.title(),
+                todoDto.description(),
+                todoDto.dueDate()
+        );
+
+        if(todoDto.assignedToId() != null){
+            Person person = personRepository.findById(todoDto.assignedToId())
+                    .orElseThrow(() -> new RuntimeException("Person not Found"));
+            todo.setAssignedTo(person);
+        }
+
+        Todo save = todoRepository.save(todo);
+
+        return convertToDto(save);
     }
 
     @Override
     public void update(Long id, TodoDto todoDto) {
-        // TODO: Implement this method
+
+        Todo existingTodo = todoRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Todo not found"));
+
+        existingTodo.setTitle(todoDto.title());
+        existingTodo.setDescription(todoDto.description());
+        existingTodo.setDueDate(todoDto.dueDate());
+
+        if(todoDto.assignedToId() != null){
+            Person person = personRepository.findById(todoDto.assignedToId())
+                    .orElseThrow(() -> new RuntimeException("Person not Found"));
+            existingTodo.setAssignedTo(person);
+        }else{
+            existingTodo.setAssignedTo(null);
+        }
+        Todo updatedTodo = todoRepository.save(existingTodo);
+
     }
 
     private TodoDto convertToDto(Todo todo) {

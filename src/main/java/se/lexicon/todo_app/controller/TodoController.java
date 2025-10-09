@@ -8,7 +8,7 @@ import se.lexicon.todo_app.service.TodoService;
 import java.util.List;
 
 @RestController
-@RequestMapping("api/todos") // localhost:9090/api/todos
+@RequestMapping("api/todo") // localhost:9090/api/todo
 public class TodoController {
 
     private TodoService todoService;
@@ -23,17 +23,20 @@ public class TodoController {
     }
 
 
-    public TodoDto createTodo(TodoDto todoDto) {
-        // TODO Implement this method
-        return null;
+    @PostMapping
+    @ResponseStatus(HttpStatus.CREATED)
+    public TodoDto createTodo(@RequestBody TodoDto todoDto) {
+        return todoService.create(todoDto);
     }
 
 
-    public void updateTodo(Long id, TodoDto todoDto) {
-        //TODO Implement this method
+    @PutMapping("/{id}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void updateTodo(@PathVariable Long id, @RequestBody TodoDto todoDto) {
+        todoService.update(id, todoDto);
     }
 
-    // GET localhost:9090/api/todos/2
+    // GET localhost:9090/api/todo/2
     @RequestMapping("/{id}")
     @ResponseStatus(HttpStatus.OK)
     public TodoDto getTodoById(@PathVariable Long id) {
