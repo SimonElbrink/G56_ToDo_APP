@@ -1,9 +1,7 @@
 package se.lexicon.todo_app.controller;
 
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.http.HttpStatus;
+import org.springframework.web.bind.annotation.*;
 import se.lexicon.todo_app.dto.TodoDto;
 import se.lexicon.todo_app.service.TodoService;
 
@@ -21,17 +19,49 @@ public class TodoController {
 
     @RequestMapping(method = RequestMethod.GET)
     public List<TodoDto> getAllTodos() {
-
         return todoService.findAll();
+    }
 
+
+    public TodoDto createTodo(TodoDto todoDto) {
+        // TODO Implement this method
+        return null;
+    }
+
+
+    public void updateTodo(Long id, TodoDto todoDto) {
+        //TODO Implement this method
     }
 
     // GET localhost:9090/api/todos/2
     @RequestMapping("/{id}")
+    @ResponseStatus(HttpStatus.OK)
     public TodoDto getTodoById(@PathVariable Long id) {
-
         return todoService.findById(id);
     }
 
+    @DeleteMapping("/{id}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void deleteTodo(@PathVariable Long id) {
+        todoService.delete(id);
+    }
+
+    @GetMapping("/person/{personId}")
+    @ResponseStatus(HttpStatus.OK)
+    public List<TodoDto> getTodosByPerson(@PathVariable Long personId) {
+        return todoService.findByAssignedToId(personId);
+    }
+
+    @GetMapping("/status")
+    @ResponseStatus(HttpStatus.OK)
+    public List<TodoDto> getTodosByStatus(@RequestParam boolean completed) {
+        return todoService.findByCompleted(completed);
+    }
+
+    @GetMapping("/overdue")
+    @ResponseStatus(HttpStatus.OK)
+    public List<TodoDto> getOverdueTodos() {
+        return todoService.findOverdueTodos();
+    }
 
 }

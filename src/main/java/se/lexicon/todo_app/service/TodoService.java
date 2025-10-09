@@ -10,4 +10,15 @@ public interface TodoService {
 
     TodoDto findById(Long id);
 
+    TodoDto create(TodoDto todoDto);
+
+    void update(Long id, TodoDto todoDto);
+
+    void delete(Long id);
+
+    List<TodoDto> findByAssignedToId(Long assignedToId);
+
+    List<TodoDto> findByCompleted(boolean completed);
+
+    List<TodoDto> findOverdueTodos();
 }

@@ -8,7 +8,8 @@ import java.util.List;
 
 public interface TodoRepository extends JpaRepository<Todo, Long> {
 
-    //TODO: Add more methods
+    //TODO: Add more methods as needed
+
     // 🔍 Find todos by title keyword (case-insensitive contains)
     List<Todo> findByTitleContainsIgnoreCase(String title);
 
