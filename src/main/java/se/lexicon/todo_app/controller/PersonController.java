@@ -1,6 +1,12 @@
 package se.lexicon.todo_app.controller;
 
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import jakarta.validation.Valid;
+import jakarta.validation.constraints.Positive;
 import org.springframework.http.HttpStatus;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import se.lexicon.todo_app.dto.PersonDto;
 import se.lexicon.todo_app.service.PersonService;
@@ -10,6 +16,9 @@ import java.util.List;
 @RestController
 @RequestMapping("api/person")
 // http://localhost:9090/api/person
+
+@Validated
+// This annotation is used to enable validation on the controller methods.
 public class PersonController {
 
     private final PersonService personService;
@@ -29,7 +38,10 @@ public class PersonController {
     // GET localhost:9090/api/person/:id -> with ex 1 or 2 as ID
     @GetMapping("/{id}")
     @ResponseStatus(HttpStatus.OK)
-    public PersonDto getPersonById(@PathVariable("id") Long id) {
+    public PersonDto getPersonById(
+            @PathVariable("id")
+            @Positive(message = "Id must be a positive number")
+            Long id) {
         return personService.findById(id);
     }
 
@@ -37,11 +49,19 @@ public class PersonController {
     // @RequestMapping(method = RequestMethod.POST)
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public PersonDto createPerson(@RequestBody PersonDto personDto) {
+    public PersonDto createPerson(
+            @RequestBody
+            @Valid
+            PersonDto personDto) {
         return personService.createPerson(personDto);
     }
 
     // GET localhost:9090/api/person/email?email=:email
+    @Operation(summary = "Find Person by Email")
+    @ApiResponses({
+            @ApiResponse(responseCode = "200", description = "Person Successfully Found"),
+            @ApiResponse(responseCode = "404", description = "Person Not Found")
+    })
     @GetMapping("/email")
     public PersonDto getPersonByEmail(@RequestParam String email) {
         return personService.findByEmail(email);

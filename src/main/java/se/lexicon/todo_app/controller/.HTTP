@@ -4,7 +4,7 @@ GET localhost:9090/api/person
 
 
 ### Find all Person with ID 1 (PathVariable)
-GET localhost:9090/api/person/1
+GET localhost:9090/api/person/1231235123
 
 ### Find all People FAIL - 404 Status Code
 GET localhost:9090/asdasdas
@@ -62,3 +62,10 @@ Content-Type: application/json
   "dueDate": "2025-10-16T17:00:00",
   "assignedToId": 2
 }
+
+###
+
+http://localhost:9090/api/todo/asdfasdf
+
+###
+GET localhost:9090/api/todo/555

@@ -2,6 +2,7 @@ package se.lexicon.todo_app.exception;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
@@ -13,6 +14,16 @@ import java.time.temporal.ChronoUnit;
 
 @ControllerAdvice
 public class MyExceptionHandler {
+
+    @ExceptionHandler(MethodArgumentNotValidException.class)
+    public ResponseEntity<ErrorResponse> handleMethodArgumentNotValidException(MethodArgumentNotValidException ex){
+
+        String[] constraints = ex.getFieldErrors().stream()
+                .map(error -> error.getField() + ": " + error.getDefaultMessage())
+                .toArray(String[]::new);
+
+        return createErrorResponse(HttpStatus.BAD_REQUEST, constraints);
+    }
 
 
     @ExceptionHandler(NoResourceFoundException.class)
@@ -32,11 +43,11 @@ public class MyExceptionHandler {
         return createErrorResponse(HttpStatus.BAD_REQUEST, errorMessage);
     }
 
-/*    @ExceptionHandler(RuntimeException.class)
+    @ExceptionHandler(RuntimeException.class)
     public ResponseEntity<ErrorResponse> handleRuntimeException(RuntimeException ex) {
         System.out.println("HandleRuntimeException: " + ex.getMessage());
         return createErrorResponse(HttpStatus.BAD_REQUEST, ex.getMessage());
-    }*/
+    }
 
     private ResponseEntity<ErrorResponse> createErrorResponse(HttpStatus status, String... errors){
         ErrorResponse errorResponse = new ErrorResponse(status.value(), errors, LocalDateTime.now().truncatedTo(ChronoUnit.SECONDS));
