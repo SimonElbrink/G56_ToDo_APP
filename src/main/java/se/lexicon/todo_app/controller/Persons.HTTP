@@ -1,0 +1,98 @@
+### Get All Persons
+GET http://localhost:9090/api/persons
+
+### Get Person by ID
+GET http://localhost:9090/api/persons/1
+
+### Get Person by Email
+GET http://localhost:9090/api/persons/email?email=simon@lexicon.se
+
+### Create Person
+POST http://localhost:9090/api/persons
+Content-Type: application/json
+
+{
+  "name": "Simon",
+  "email": "simon@lexicon.se"
+}
+
+### Update Person (Full Update - PathVariable + RequestBody)
+PUT http://localhost:9090/api/persons/1
+Content-Type: application/json
+
+{
+  "id": 1,
+  "name": "Simon",
+  "email": "simon@lexicon.se"
+}
+
+### Update Person Name (Partial Update - PathVariable + RequestParam)
+PATCH http://localhost:9090/api/persons/1?name=Simon Elbrink
+
+### Delete Person
+DELETE http://localhost:9090/api/persons/1
+
+# Extra
+
+# https://www.jetbrains.com/help/idea/http-client-in-product-code-editor.html
+# https://www.jetbrains.com/help/idea/http-client-variables.html
+
+### Create People (Iterate)
+@myServer = http://localhost:9090
+
+< {%
+    request.variables.set("person", [ // test data
+        {"name": "Simon", "email": "Simon@lexicon.se"},
+        {"name": "Mehrdad", "email": "Mehrdad@lexicon.se"},
+        {"name": "Elnaz", "email": "Elnaz@lexicon.se"},
+    ])
+%}
+POST {{myServer}}/api/persons
+Content-Type: application/json
+
+{
+  "name": "{{$.person..name}}",
+  "email": "{{$.person..email}}"
+}
+
+
+### Invalid Email Format Test
+POST http://localhost:9090/api/persons
+Content-Type: application/json
+
+{
+  "name": "Test Person",
+  "email": "invalid.email"
+}
+
+### Empty Name Test
+POST http://localhost:9090/api/persons
+Content-Type: application/json
+
+{
+  "name": "",
+  "email": "test@lexicon.se"
+}
+
+### Non-existent ID Test
+GET http://localhost:9090/api/persons/999
+
+### Duplicate Email Test
+POST http://localhost:9090/api/persons
+Content-Type: application/json
+
+{
+  "name": "Another Simon",
+  "email": "simon@lexicon.se"
+}
+
+### Long Name Test
+POST http://localhost:9090/api/persons
+Content-Type: application/json
+
+{
+  "name": "This is a very long name that should exceed the maximum allowed length for the name field in our validation rules and therefore should trigger a validation error",
+  "email": "long@lexicon.se"
+}
+
+###

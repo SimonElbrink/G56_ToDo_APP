@@ -1,0 +1,40 @@
+### Get All Todos
+GET localhost:9090/api/todos
+
+### Get Todo by ID
+GET localhost:9090/api/todos/1
+
+### Get Todos by Person
+GET localhost:9090/api/todos/person/1
+
+### Get Todos by Completion Status
+GET localhost:9090/api/todos/status?completed=true
+
+### Get Overdue Todos
+GET localhost:9090/api/todos/overdue
+
+### Create TODO
+POST localhost:9090/api/todos
+Content-Type: application/json
+
+{
+  "title": "Write a user guide",
+  "description": "update my instruction guide",
+  "dueDate": "2025-10-10T17:00:00",
+  "assignedToId": 1
+}
+
+### Update Todo
+PUT localhost:9090/api/todos/1
+Content-Type: application/json
+
+{
+  "title": "Write a user guide + Graphics",
+  "description": "update my instruction guide and adding graphics",
+  "dueDate": "2025-10-16T17:00:00",
+  "assignedToId": 2
+}
+
+### Delete Todo
+DELETE localhost:9090/api/todos/1
+

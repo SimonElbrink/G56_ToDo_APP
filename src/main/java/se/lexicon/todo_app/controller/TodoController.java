@@ -15,7 +15,7 @@ import java.net.URI;
 import java.util.List;
 
 @RestController
-@RequestMapping("api/todo") // localhost:9090/api/todo
+@RequestMapping("api/todos") // localhost:9090/api/todos
 @Validated
 public class TodoController {
 
@@ -61,7 +61,7 @@ public class TodoController {
         todoService.update(id, todoDto);
     }
 
-    // GET localhost:9090/api/todo/2
+    // GET localhost:9090/api/todos/2
     @RequestMapping("/{id}")
     @ResponseStatus(HttpStatus.OK)
     public TodoDto getTodoById(
@@ -82,7 +82,7 @@ public class TodoController {
         todoService.delete(id);
     }
 
-    @GetMapping("/person/{personId}")
+    @GetMapping("/persons/{personId}")
     @ResponseStatus(HttpStatus.OK)
     public List<TodoDto> getTodosByPerson(
             @PathVariable

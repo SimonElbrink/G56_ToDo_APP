@@ -14,8 +14,8 @@ import se.lexicon.todo_app.service.PersonService;
 import java.util.List;
 
 @RestController
-@RequestMapping("api/person")
-// http://localhost:9090/api/person
+@RequestMapping("api/persons")
+// http://localhost:9090/api/persons
 
 @Validated
 // This annotation is used to enable validation on the controller methods.
@@ -27,7 +27,7 @@ public class PersonController {
         this.personService = personService;
     }
 
-    // GET localhost:9090/api/person
+    // GET localhost:9090/api/persons
     // @RequestMapping(method = RequestMethod.GET)
     @GetMapping
     @ResponseStatus(HttpStatus.OK)
@@ -35,7 +35,7 @@ public class PersonController {
         return personService.findAll();
     }
 
-    // GET localhost:9090/api/person/:id -> with ex 1 or 2 as ID
+    // GET localhost:9090/api/persons/:id -> with ex 1 or 2 as ID
     @GetMapping("/{id}")
     @ResponseStatus(HttpStatus.OK)
     public PersonDto getPersonById(
@@ -46,7 +46,7 @@ public class PersonController {
         return personService.findById(id);
     }
 
-    // POST localhost:9090/api/person -> with a JSON Body
+    // POST localhost:9090/api/persons -> with a JSON Body
     // @RequestMapping(method = RequestMethod.POST)
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
@@ -59,7 +59,7 @@ public class PersonController {
         return personService.createPerson(personDto);
     }
 
-    // GET localhost:9090/api/person/email?email=:email
+    // GET localhost:9090/api/persons/email?email=:email
     @Operation(summary = "Find Person by Email")
     @ApiResponses({
             @ApiResponse(responseCode = "200", description = "Person Successfully Found"),
