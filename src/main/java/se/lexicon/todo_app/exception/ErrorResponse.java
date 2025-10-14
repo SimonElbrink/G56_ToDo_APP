@@ -1,10 +1,15 @@
 package se.lexicon.todo_app.exception;
 
 import java.time.LocalDateTime;
+import java.time.temporal.ChronoUnit;
 
 public record ErrorResponse(
         int status,
         String[] errors,
         LocalDateTime timestamp
 ) {
+
+    public ErrorResponse(int status, String[] errors) {
+        this(status, errors, LocalDateTime.now().truncatedTo(ChronoUnit.SECONDS));
+    }
 }
