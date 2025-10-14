@@ -58,6 +58,13 @@ public class Todo {
         this.assignedTo = assignedTo;
     }
 
+    public Todo(String title, String description, Boolean completed, LocalDateTime dueDate) {
+        this.title = title;
+        this.description = description;
+        this.completed = completed;
+        this.dueDate = dueDate;
+    }
+
     public Todo(String title, String description, LocalDateTime dueDate) {
         this.title = title;
         this.description = description;

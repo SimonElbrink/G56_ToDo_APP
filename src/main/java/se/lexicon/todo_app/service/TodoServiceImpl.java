@@ -42,6 +42,7 @@ public class TodoServiceImpl implements TodoService {
         Todo todo = new Todo(
                 todoDto.title(),
                 todoDto.description(),
+                todoDto.completed(),
                 todoDto.dueDate()
         );
 
@@ -64,6 +65,7 @@ public class TodoServiceImpl implements TodoService {
 
         existingTodo.setTitle(todoDto.title());
         existingTodo.setDescription(todoDto.description());
+        existingTodo.setCompleted(todoDto.completed());
         existingTodo.setDueDate(todoDto.dueDate());
 
         if (todoDto.assignedToId() != null) {
