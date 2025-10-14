@@ -1,14 +1,19 @@
 package se.lexicon.todo_app.controller;
 
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.*;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import se.lexicon.todo_app.dto.PersonDto;
+import se.lexicon.todo_app.exception.ErrorResponse;
 import se.lexicon.todo_app.service.PersonService;
 
 import java.util.List;
@@ -46,11 +51,15 @@ public class PersonController {
         return personService.findById(id);
     }
 
-    // POST localhost:9090/api/persons -> with a JSON Body
-    // @RequestMapping(method = RequestMethod.POST)
-    @PostMapping
+    @Operation(summary = "Create new person", description = "Creates a new person with the provided details")
+    @ApiResponses({
+            @ApiResponse(responseCode = "201", description = "Person successfully created"),
+            @ApiResponse(responseCode = "400", description = "Invalid person data provided", content = @Content(schema = @Schema(implementation = ErrorResponse.class)))
+    })
+    @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(HttpStatus.CREATED)
     public PersonDto createPerson(
+            @Parameter(description = "Person details", required = true)
             @RequestBody
             @NotNull(message = "Person cannot be null")
             @Valid
@@ -63,7 +72,7 @@ public class PersonController {
     @Operation(summary = "Find Person by Email")
     @ApiResponses({
             @ApiResponse(responseCode = "200", description = "Person Successfully Found"),
-            @ApiResponse(responseCode = "404", description = "Person Not Found")
+            @ApiResponse(responseCode = "404", description = "Person Not Found", content = @Content(schema = @Schema(implementation = ErrorResponse.class)))
     })
     @GetMapping("/email")
     public PersonDto getPersonByEmail(
