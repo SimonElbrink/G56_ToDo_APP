@@ -89,7 +89,12 @@ public class PersonServiceImpl implements PersonService {
 
     @Override
     public void update(Long id, PersonDto personDto) {
-        //TODO Implement this method
+        Person person = personRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Person not found"));
+        person.setName(personDto.name());
+        person.setEmail(personDto.email());
+        Person updated = personRepository.save(person);
+        log.info("Updated person: {}", updated);
     }
 
     @Override

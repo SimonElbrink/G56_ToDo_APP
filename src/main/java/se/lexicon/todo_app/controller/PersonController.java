@@ -4,7 +4,7 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import jakarta.validation.Valid;
-import jakarta.validation.constraints.Positive;
+import jakarta.validation.constraints.*;
 import org.springframework.http.HttpStatus;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
@@ -41,7 +41,8 @@ public class PersonController {
     public PersonDto getPersonById(
             @PathVariable("id")
             @Positive(message = "Id must be a positive number")
-            Long id) {
+            Long id
+    ) {
         return personService.findById(id);
     }
 
@@ -51,8 +52,10 @@ public class PersonController {
     @ResponseStatus(HttpStatus.CREATED)
     public PersonDto createPerson(
             @RequestBody
+            @NotNull(message = "Person cannot be null")
             @Valid
-            PersonDto personDto) {
+            PersonDto personDto
+    ) {
         return personService.createPerson(personDto);
     }
 
@@ -63,12 +66,26 @@ public class PersonController {
             @ApiResponse(responseCode = "404", description = "Person Not Found")
     })
     @GetMapping("/email")
-    public PersonDto getPersonByEmail(@RequestParam String email) {
-        return personService.findByEmail(email);
+    public PersonDto getPersonByEmail(
+            @RequestParam(value = "email")
+            @NotBlank(message = "Email is required")
+            @Email(message = "Email must be a valid email address")
+            @Size(max = 150, message = "Email must be less than 150 characters")
+            String emailAddress
+    ) {
+        return personService.findByEmail(emailAddress);
     }
 
     @PutMapping("/{id}")
-    public void updatePerson(@PathVariable Long id, @RequestBody PersonDto personDto) {
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void updatePerson(
+            @PathVariable
+            @NotNull(message = "Id cannot be null")
+            Long id,
+            @RequestBody
+            @NotNull(message = "Person cannot be null")
+            PersonDto personDto
+    ) {
         personService.update(id, personDto);
     }
 
@@ -79,7 +96,11 @@ public class PersonController {
 
     @DeleteMapping("/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void deletePerson(@PathVariable Long id) {
+    public void deletePerson(
+            @PathVariable
+            @NotNull(message = "Id cannot be null")
+            Long id
+    ) {
         personService.delete(id);
 
     }

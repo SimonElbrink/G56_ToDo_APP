@@ -45,7 +45,7 @@ public class TodoServiceImpl implements TodoService {
                 todoDto.dueDate()
         );
 
-        if(todoDto.assignedToId() != null){
+        if (todoDto.assignedToId() != null) {
             Person person = personRepository.findById(todoDto.assignedToId())
                     .orElseThrow(() -> new RuntimeException("Person not Found"));
             todo.setAssignedTo(person);
@@ -66,27 +66,15 @@ public class TodoServiceImpl implements TodoService {
         existingTodo.setDescription(todoDto.description());
         existingTodo.setDueDate(todoDto.dueDate());
 
-        if(todoDto.assignedToId() != null){
+        if (todoDto.assignedToId() != null) {
             Person person = personRepository.findById(todoDto.assignedToId())
                     .orElseThrow(() -> new RuntimeException("Person not Found"));
             existingTodo.setAssignedTo(person);
-        }else{
+        } else {
             existingTodo.setAssignedTo(null);
         }
         Todo updatedTodo = todoRepository.save(existingTodo);
 
-    }
-
-    private TodoDto convertToDto(Todo todo) {
-        return new TodoDto(
-                todo.getId(),
-                todo.getTitle(),
-                todo.getDescription(),
-                todo.getCompleted(),
-                todo.getCreatedAt(),
-                todo.getDueDate(),
-                todo.getAssignedTo() != null ? todo.getAssignedTo().getId() : null,
-                todo.getAttachments().size());
     }
 
     @Override
@@ -114,4 +102,18 @@ public class TodoServiceImpl implements TodoService {
                 .map(this::convertToDto)
                 .collect(Collectors.toList());
     }
+
+    private TodoDto convertToDto(Todo todo) {
+        return TodoDto.builder()
+                .id(todo.getId())
+                .title(todo.getTitle())
+                .description(todo.getDescription())
+                .completed(todo.getCompleted())
+                .createdAt(todo.getCreatedAt())
+                .dueDate(todo.getDueDate())
+                .assignedToId(todo.getAssignedTo() != null ? todo.getAssignedTo().getId() : null)
+                .numberOfAttachments(todo.getAttachments().size())
+                .build();
+    }
+
 }
