@@ -12,11 +12,11 @@ public interface TodoService {
 
     TodoDto create(TodoDto todoDto);
 
-    void update(Long id, TodoDto todoDto);
+    TodoDto update(Long id, TodoDto todoDto);
 
     void delete(Long id);
 
-    List<TodoDto> findByAssignedToId(Long assignedToId);
+    List<TodoDto> findByAssignedTo_Id(Long assignedToId);
 
     List<TodoDto> findByCompleted(boolean completed);
 

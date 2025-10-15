@@ -58,7 +58,7 @@ public class TodoServiceImpl implements TodoService {
     }
 
     @Override
-    public void update(Long id, TodoDto todoDto) {
+    public TodoDto update(Long id, TodoDto todoDto) {
 
         Todo existingTodo = todoRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Todo not found"));
@@ -77,6 +77,7 @@ public class TodoServiceImpl implements TodoService {
         }
         Todo updatedTodo = todoRepository.save(existingTodo);
 
+        return convertToDto(updatedTodo);
     }
 
     @Override
@@ -85,7 +86,7 @@ public class TodoServiceImpl implements TodoService {
     }
 
     @Override
-    public List<TodoDto> findByAssignedToId(Long assignedToId) {
+    public List<TodoDto> findByAssignedTo_Id(Long assignedToId) {
         return todoRepository.findByAssignedTo_Id(assignedToId).stream()
                 .map(this::convertToDto)
                 .collect(Collectors.toList());

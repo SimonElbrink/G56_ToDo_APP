@@ -3,10 +3,10 @@ package se.lexicon.todo_app.service;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import se.lexicon.notify.model.Email;
+import se.lexicon.notify.service.MessageService;
 import se.lexicon.todo_app.dto.PersonDto;
 import se.lexicon.todo_app.entity.Person;
 import se.lexicon.todo_app.repo.PersonRepository;
-import se.lexicon.notify.service.EmailService;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -15,11 +15,11 @@ import java.util.stream.Collectors;
 @Service
 public class PersonServiceImpl implements PersonService {
 
-    private PersonRepository personRepository;
-    private EmailService emailService;
+    private final PersonRepository personRepository;
+    private final MessageService<Email> emailService;
 
 
-    public PersonServiceImpl(PersonRepository personRepository, EmailService emailService) {
+    public PersonServiceImpl(PersonRepository personRepository, MessageService<Email> emailService) {
         this.personRepository = personRepository;
         this.emailService = emailService;
     }
@@ -32,22 +32,22 @@ public class PersonServiceImpl implements PersonService {
 
         person = personRepository.save(person);
 
-//        // Send a welcome email to the new user
-//        if (saved.getId() != null) {
-//           boolean sentMessage = emailService.sendMessage(new Email(person.getEmail(),
-//                    "Welcome to ToDoAPP!",
-//                    """
-//                            Hello, %s
-//                            Thank you for signing up to our App.
-//                            We hope you enjoy using it. 🎉
-//                            """.formatted(person.getName())));
-//
-//           if (!sentMessage) {
-//               log.error("Failed to send welcome email to: {}", person.getEmail());
-//           }else{
-//               log.info("Successfully sent welcome email to: {}",person.getEmail());
-//           }
-//        }
+        // Send a welcome email to the new user
+        if (person.getId() != null) {
+           boolean sentMessage = emailService.sendMessage(new Email(person.getEmail(),
+                    "Welcome to ToDoAPP!",
+                    """
+                            Hello, %s
+                            Thank you for signing up to our App.
+                            We hope you enjoy using it. 🎉
+                            """.formatted(person.getName())));
+
+           if (!sentMessage) {
+               log.error("Failed to send welcome email to: {}", person.getEmail());
+           }else{
+               log.info("Successfully sent welcome email to: {}",person.getEmail());
+           }
+        }
 
         return PersonDto.builder()
                 .id(person.getId())
@@ -88,13 +88,19 @@ public class PersonServiceImpl implements PersonService {
     }
 
     @Override
-    public void update(Long id, PersonDto personDto) {
+    public PersonDto update(Long id, PersonDto personDto) {
         Person person = personRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Person not found"));
         person.setName(personDto.name());
         person.setEmail(personDto.email());
         Person updated = personRepository.save(person);
         log.info("Updated person: {}", updated);
+
+        return PersonDto.builder()
+                .id(updated.getId())
+                .name(updated.getName())
+                .email(updated.getEmail())
+                .build();
     }
 
     @Override
