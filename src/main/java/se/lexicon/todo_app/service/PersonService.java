@@ -14,7 +14,7 @@ public interface PersonService {
 
     void delete(Long id);
 
-    void update(Long id, PersonDto personDto);
+    PersonDto update(Long id, PersonDto personDto);
 
     PersonDto findByEmail(String email);
 }
