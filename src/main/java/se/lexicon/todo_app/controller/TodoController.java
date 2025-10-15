@@ -130,7 +130,7 @@ public class TodoController {
             @NotNull(message = "Person id cannot be null")
             Long personId
     ) {
-        return todoService.findByAssignedToId(personId);
+        return todoService.findByAssignedTo_Id(personId);
     }
 
     @Operation(summary = "Get todos by status", description = "Retrieves todos based on completion status")
