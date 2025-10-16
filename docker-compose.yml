@@ -1,0 +1,53 @@
+version: '3.8'
+
+services:
+  mysql:
+    image: mysql:8.0
+    container_name: todo-mysql-db
+    environment:
+      MYSQL_DATABASE: TODO_DB
+      MYSQL_USER: todo_user
+      MYSQL_PASSWORD: todo_user
+      MYSQL_ROOT_PASSWORD: root
+    ports:
+      - "3309:3306"
+    volumes:
+      - mysql-data:/var/lib/mysql
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-u", "root", "-proot"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    networks:
+      - todo-network
+    command: --character-set-server=utf8mb4 --collation-server=utf8mb4_unicode_ci
+
+  todo-app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: todo-app:0.0.1
+    container_name: todo-spring-app
+    depends_on:
+      mysql:
+        condition: service_healthy
+    environment:
+      - SPRING_PROFILES_ACTIVE=prd
+      - SPRING_DATASOURCE_URL=jdbc:mysql://todo-mysql-db:3306/TODO_DB?autoReconnect=true&useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=Europe/Berlin
+      - SPRING_DATASOURCE_USERNAME=todo_user
+      - SPRING_DATASOURCE_PASSWORD=todo_user
+      - APP_USER_EMAIL=YOUR_EMAIL_HERE # Change this to your email address
+      - APP_USER_PASSWORD=YOUR_APP_PASSWORD_HERE # Change this to your app password
+    ports:
+      - "9191:8080"
+    networks:
+      - todo-network
+    restart: unless-stopped
+
+networks:
+  todo-network:
+    driver: bridge
+
+volumes:
+  mysql-data:
+    name: todo-mysql-data
